@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>patch protocol</title>
+    <script>
+        let get_content;
+        let postid_content;
+        let posttitle_content;
+        let postbody_content;
+        let put_content;
+        let putid_content;
+        let puttitle_content;
+        let putbody_content;
+        let delete_content;
+
+        function getbutton(){
+            alert("get 실행");
+            fetch("http://localhost:3000/data")
+            .then(res => res.json())
+            .then(data => get_content.innerHTML = data.map( v =>`<div> Id : ${v.id} Title : ${v.title} Body : ${v.body}</div>`))
+            .then( () => get_content.innerHTML = get_content.innerHTML.replaceAll(",",""))
+            .catch((error) => console.log(error))
+        }
+
+        function postbutton(){
+            alert("Post 실행");
+            let abcd = {
+                id: parseInt(postid_content.value),
+                title: posttitle_content.value,
+                body: postbody_content.value
+            };
+            fetch("http://localhost:3000/data", {
+                method: "POST",
+                headers: {
+                    "Content-Type":"application/json",
+                },
+                body: JSON.stringify(abcd),
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+        }
+
+        function putbutton(){
+            alert("put 실행")
+            console.log(put_content)
+            let kit = `http://localhost:3000/data/${parseInt(put_content.value)}`
+            let abcd = {
+                id: parseInt(putid_content.value),
+                title: puttitle_content.value,
+                body: putbody_content.value
+            };
+            fetch(kit, {
+                method: "PUT",
+                headers: {
+                    "Content-Type":"application/json",
+                },
+                body: JSON.stringify(abcd),
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+        }
+
+        function deletebutton(){
+            alert("delete 실행")
+            let kit = `http://localhost:3000/data/${parseInt(delete_content.value)}`
+            fetch(kit, {
+                method : "DELETE",
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+        }
+
+        window.onload = () => {
+           get_content = document.getElementById("get_box");
+           postid_content = document.getElementById("postid_box");
+           posttitle_content = document.getElementById("posttitle_box");
+           postbody_content = document.getElementById("postbody_box");
+           put_content = document.getElementById("put_box");
+           putid_content = document.getElementById("putid_box");
+           puttitle_content = document.getElementById("puttitle_box");
+           putbody_content = document.getElementById("putbody_box");
+           delete_content= document.getElementById("delete_box");
+        };
+    </script>
+</head>
+<body>
+    <H1>Patch Network</H1>
+        <input type="button" onclick="getbutton()" value="Get" />
+        <p id="get_box" style="font-size: 20px; background-color: aliceblue; border: 1px solid black; width: 50%; ">REPLACE</p>
+    
+    <p>Post
+        <div>Id</div><input type="text" id="postid_box"/><br>
+        <div>Title</div><input type="text" id="posttitle_box"/><br>
+        <div>Body</div><input type="text" id="postbody_box"/>
+        <input type="button" onclick="postbutton()" value="post" />
+    </p>
+    
+    <p>Put
+        <div>Id를 입력하세요</div><input type="text" id="put_box"><br>
+        <div>Id</div><input type="text" id="putid_box"/><br>
+        <div>Title</div><input type="text" id="puttitle_box"/><br>
+        <div>Body</div><input type="text" id="putbody_box"/>
+        <input type="button" onclick="putbutton()" value="put" />
+    </p>
+    <p>delete
+        <div>Id를 입력하세요</div><input type="text" id="delete_box">
+        <input type="button" onclick="deletebutton()" value="delete" />    
+    </p>
+    
+</body>
+</html>

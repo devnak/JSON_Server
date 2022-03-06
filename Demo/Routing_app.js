@@ -12,4 +12,11 @@ app.get("/",(req,res) =>{
     res.sendFile(__dirname + "/index.html");
 })
 
+app.get("/ssr",(req,res) =>{
+    fs.readFile('./template.html','utf-8',  (err,result) => {
+        fs.readFile("./routes/Myfile.json",'utf-8',(err,json) => {
+            res.send(result.replace("REPLACE",json));
+        })
+    })
+})
 app.listen(3000,() => console.log("3000 port listen !"));
